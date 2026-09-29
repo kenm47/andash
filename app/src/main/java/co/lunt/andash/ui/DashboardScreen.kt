@@ -9,7 +9,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import co.lunt.andash.domain.CountdownState
@@ -36,6 +38,7 @@ fun DashboardScreen(
         modifier = modifier
             .fillMaxSize()
             .background(Palette.Background)
+            .pointerInput(Unit) { detectTapGestures(onLongPress = { onLongPressClock() }) }
             .safeDrawingPadding()
             .padding(horizontal = 20.dp, vertical = 12.dp)
             .alpha(if (night) 0.55f else 1f)

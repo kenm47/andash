@@ -243,4 +243,14 @@ class DashboardUiTest {
         rule.runOnUiThread { co.lunt.andash.ui.openOtherLauncher(rule.activity) }
         rule.waitUntil(10_000) { topPackage().let { it.isNotEmpty() && it != "co.lunt.andash" } }
     }
+
+    @Test
+    fun longPressAnywhereOpensSettingsWithAnExitButton() {
+        cal.addCalendar(1)
+        waitForText("countdown_value") { it == "Clear" }
+        node("countdown").performTouchInput { longClick() }
+        rule.waitUntil(5_000) { rule.onAllNodesWithTag("settings").fetchSemanticsNodes().isNotEmpty() }
+        node("exit_to_launcher").performClick()
+        rule.waitUntil(10_000) { topPackage().let { it.isNotEmpty() && it != "co.lunt.andash" } }
+    }
 }

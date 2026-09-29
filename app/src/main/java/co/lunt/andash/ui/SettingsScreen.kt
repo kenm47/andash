@@ -83,6 +83,12 @@ fun SettingsScreen(
                 Button(onClick = actions.close, modifier = Modifier.testTag("settings_close")) { Text("Done") }
             }
         }
+        item {
+            OutlinedButton(
+                onClick = actions.openDefaultLauncher,
+                modifier = Modifier.fillMaxWidth().testTag("exit_to_launcher"),
+            ) { Text("Exit to phone home screen") }
+        }
 
         item { Header("Calendars") }
         if (byAccount.isEmpty()) {
