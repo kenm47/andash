@@ -148,7 +148,9 @@ fun NextMeetingSection(
                     color = Palette.Secondary,
                     fontSize = 24.sp,
                 )
-                val tags = listOfNotNull(meeting.link?.kind, meeting.location)
+                // When the location is just the meeting link, the "Meet"/"Zoom" tag already says it.
+                val location = meeting.location?.takeUnless { meeting.link != null && it.contains(meeting.link.url) }
+                val tags = listOfNotNull(meeting.link?.kind, location)
                 if (tags.isNotEmpty()) {
                     Text(
                         text = tags.joinToString("  ·  "),
