@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -24,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -184,23 +186,26 @@ fun UpcomingSection(
     formats: TimeFormats,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier = modifier.fillMaxWidth().testTag("upcoming"), verticalArrangement = Arrangement.Top) {
-        // Items today need no header; anything later gets a day label.
-        var lastDay: java.time.LocalDate = today
-        for (m in meetings) {
-            val day = m.start.atZone(zone).toLocalDate()
-            if (day != lastDay) {
-                Text(
-                    text = formats.dayLabel(day, today).uppercase(),
-                    modifier = Modifier.padding(top = 8.dp, bottom = 2.dp).testTag("upcoming_day"),
-                    color = Palette.Dim,
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Bold,
-                    letterSpacing = 2.sp,
-                )
-                lastDay = day
+    BoxWithConstraints(modifier = modifier.fillMaxWidth().testTag("upcoming")) {
+        val shown = fitUpcoming(meetings, today, zone, maxHeight.value, LocalDensity.current.fontScale)
+        Column(verticalArrangement = Arrangement.Top) {
+            // Items today need no header; anything later gets a day label.
+            var lastDay: java.time.LocalDate = today
+            for (m in shown) {
+                val day = m.start.atZone(zone).toLocalDate()
+                if (day != lastDay) {
+                    Text(
+                        text = formats.dayLabel(day, today).uppercase(),
+                        modifier = Modifier.padding(top = 8.dp, bottom = 2.dp).testTag("upcoming_day"),
+                        color = Palette.Dim,
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Bold,
+                        letterSpacing = 2.sp,
+                    )
+                    lastDay = day
+                }
+                UpcomingRow(m, zone, formats)
             }
-            UpcomingRow(m, zone, formats)
         }
     }
 }
