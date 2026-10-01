@@ -88,3 +88,7 @@ to the phone) only needs to implement `CalendarSource`.
 - `compileSdk` is 37 because current Compose requires it; `targetSdk` is 36; `minSdk` is 34.
 - Tests ran on the real phone rather than an emulator.
 - Sound alerts, weather and the other "future features" are not built yet.
+
+## License
+
+[MIT](LICENSE)
